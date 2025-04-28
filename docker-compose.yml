@@ -1,0 +1,65 @@
+# # version: '4.3.0'
+
+# services:
+#   localstack:
+#     image: localstack/localstack
+#     ports:
+#       - "4566:4566"            # Port pour les services AWS
+#       - "4510-4559:4510-4559"  # Ports pour les extensions
+#     environment:
+#       - SERVICES=dynamodb,lambda,apigateway
+#       - DOCKER_HOST=unix:///var/run/docker.sock
+#       - DEFAULT_REGION=us-east-1
+#       - AWS_ACCESS_KEY_ID=test
+#       - AWS_SECRET_ACCESS_KEY=test
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock  # Pour exécuter des conteneurs Docker à l'intérieur de LocalStack
+#       # - ./:/docker-entrypoint-initaws.d
+
+# version: '3.8'
+
+# services:
+#   localstack:
+#     image: localstack/localstack:2.3.0  # Version stable spécifique
+#     ports:
+#       - "4566:4566"
+#       - "4510-4559:4510-4559"
+#     environment:
+#       - SERVICES=dynamodb,lambda,apigateway
+#       - AWS_DEFAULT_REGION=us-east-1
+#       - AWS_ACCESS_KEY_ID=test
+#       - AWS_SECRET_ACCESS_KEY=test
+#       - LOCALSTACK_HOST=localhost
+#       - DEBUG=1  # Active les logs détaillés
+#     volumes:
+#       - ./localstack_data:/var/lib/localstack  # Volume persistant
+#       - /var/run/docker.sock:/var/run/docker.sock
+#       - ./:/docker-entrypoint-initaws.d
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:4566/health"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 10
+
+# version: '3.8'
+
+services:
+  localstack:
+    image: localstack/localstack:2.3.0  # Version stable
+    ports:
+      - "4566:4566"
+    # - "4510-4559:4510-4559"  # Ports pour les services
+    #   - "8080:8080"  # Port pour l'API Web de LocalStack (optionnel)
+    environment:
+      - SERVICES=dynamodb,lambda,apigateway
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - LOCALSTACK_HOST=localhost
+    volumes:
+      - type: bind
+        source: ./localstack_data
+        target: /var/lib/localstack
+      # - .\localstack_data:/var/lib/localstack  # Persistance des données
+      # - \\.\pipe\docker_engine:\\.\pipe\docker_engine  # Windows Docker socket
+  
