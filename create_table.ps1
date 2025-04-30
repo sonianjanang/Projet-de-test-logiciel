@@ -25,3 +25,5 @@ aws dynamodb create-table `
 #  echo "Tables created successfully."
 Write-Host "Tables créées avec succès."
 # Afficher la liste des tables créées
+# Afficher la liste des tables créées
+aws --endpoint-url=http://localhost:4566 dynamodb list-tables
